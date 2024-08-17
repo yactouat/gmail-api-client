@@ -60,6 +60,9 @@ if __name__ == "__main__":
 
     email_queue_day_counter_key = "email_queue_day_counter"
 
+    # minimum wait time is 0.1 seconds (to not overload Redis)
+    minimum_wait_time = 0.1
+
     while True:
         try:
             # connect to redis
@@ -118,14 +121,17 @@ if __name__ == "__main__":
                     severity="INFO",
                 )
                 if wait_time == 0:
-                    # minimum wait time is 0.1 seconds (to not overload Redis)
-                    wait_time = 0.1
+                    wait_time = minimum_wait_time
                 # wait x seconds before sending the next email
                 time.sleep(wait_time)
-
+            
         except Exception as e:
             logger.log_struct(
                 get_structured_log_msg(service_name, "error sending email", str(e)),
                 severity="ERROR",
             )
             error_reporting_client.report_exception()
+
+        finally:
+            time.sleep(minimum_wait_time)
+
