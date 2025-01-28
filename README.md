@@ -2,7 +2,13 @@
 
 A generic emailing system that use GMail Workspace API to send emails.
 
-It listens to a queue of emails to send and sends them using the Gmail API. It also takes into account whatever Workspace plan rate limits for sending emails are in place.
+It listens to a Redis queue of emails to send and sends them using the Gmail API. It also takes into account whatever Workspace plan rate limits for sending emails are in place.
+
+The expected format of queued emails is a JSON object with the following fields:
+
+- `to`: the email address to send the email to
+- `subject`: the subject of the email
+- `message`: the body of the email
 
 ## pre requisites
 
@@ -34,7 +40,7 @@ Now that everything is working, you'll want to create a service for the app, so 
 
 - `sudo nano /etc/systemd/system/gmail_api_client.service` and add the following content:
 
-```bash
+```
 [Unit]
 Description=GMail API Client
 After=network.target
@@ -62,3 +68,5 @@ sudo systemctl start gmail_api_client
 sudo systemctl enable gmail_api_client
 sudo systemctl status gmail_api_client
 ```
+
+... you can of course rename the service `gmail_api_client` to whatever you want.

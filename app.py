@@ -46,8 +46,8 @@ def send_email(to: str, subject: str, message: str):
 if __name__ == "__main__":
     load_dotenv(f"{abs_path}/.env")
 
-    email_queue_name = "email_queue"
-    service_name = "gmail-api-client"
+    email_queue_name = os.environ.get("EMAIL_QUEUE_NAME") or "email_queue"
+    service_name = os.environ.get("SERVICE_NAME") or "gmail-api-client"
 
     error_reporting_client, logger = get_gcp_error_reporting_logging_clients(
         service_name
@@ -60,8 +60,8 @@ if __name__ == "__main__":
 
     email_queue_day_counter_key = "email_queue_day_counter"
 
-    # minimum wait time is 0.1 seconds (to not overload Redis)
-    minimum_wait_time = 0.1
+    # minimum wait time is 0.5 seconds (to avoid overloading Redis)
+    minimum_wait_time = 0.5
 
     while True:
         try:
