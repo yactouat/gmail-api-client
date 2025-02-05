@@ -1,3 +1,4 @@
-gcp-creds.json
-venv
 .env
+gcp-creds.json
+scratchpad.py
+venv

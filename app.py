@@ -61,7 +61,7 @@ if __name__ == "__main__":
     email_queue_day_counter_key = "email_queue_day_counter"
 
     # minimum wait time is 0.5 seconds (to avoid overloading Redis)
-    minimum_wait_time = 0.5
+    minimum_wait_time = 1
 
     while True:
         try:
